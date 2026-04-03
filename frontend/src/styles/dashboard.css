@@ -1,4 +1,4 @@
-.dashboard{max-width:1400px;margin:0 auto;padding:0 1rem 2rem}
+.dashboard{width:calc(100% - 2.5rem);max-width:none;margin:0 auto;padding:0 0 2rem}
 .dashboard-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:2rem}
 .dashboard-header h2{font-size:2rem;color:var(--text)}
 .add-lead-btn{padding:.92rem 1.4rem;border-radius:1rem;background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:#fff;font-size:1rem;font-weight:600;box-shadow:0 18px 40px rgba(124,58,237,.22);transition:transform .3s ease,box-shadow .3s ease}
@@ -14,4 +14,4 @@
 .leads-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.35rem}
 .no-leads{padding:2.5rem;text-align:center;color:var(--text-muted);font-size:1.05rem}
 .dashboard-loading{text-align:center;padding:3rem;font-size:1.1rem;color:var(--primary-strong)}
-@media (max-width:768px){.dashboard-header,.filter-section{flex-direction:column;align-items:flex-start}.leads-grid{grid-template-columns:1fr}.filter-select{width:100%}}
+@media (max-width:768px){.dashboard{width:calc(100% - 1rem)}.dashboard-header,.filter-section{flex-direction:column;align-items:flex-start}.leads-grid{grid-template-columns:1fr}.filter-select{width:100%}}

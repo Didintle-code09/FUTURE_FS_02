@@ -5,8 +5,8 @@ function LeadsPreview({ leads }) {
         <span className="section-label">Recent Leads</span>
         <h2 className="section-title">Keep every conversation moving without losing the details.</h2>
         <p className="section-copy">
-          This preview is powered by sample data today and structured to swap directly to your backend list view
-          tomorrow.
+          Stay on top of every new opportunity with a clear view of who they are, where they came from, and what
+          needs to happen next.
         </p>
       </div>
 
@@ -14,7 +14,7 @@ function LeadsPreview({ leads }) {
         <div className="table-header">
           <div>
             <h3>Latest pipeline activity</h3>
-            <p>Ready to connect to GET /api/leads when your live data is available.</p>
+            <p>A clean overview of your newest leads, their status, and where your team should focus next.</p>
           </div>
           <span className="table-pill">Updated 2 minutes ago</span>
         </div>

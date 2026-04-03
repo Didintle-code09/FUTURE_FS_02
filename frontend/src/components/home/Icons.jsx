@@ -238,11 +238,26 @@ export function LinkedInIcon() {
   );
 }
 
-export function TwitterIcon() {
+export function FacebookIcon() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24">
       <path
-        d="M4 4h4.4l4 5.4L17.1 4H20l-6.1 6.9L20.4 20H16l-4.2-5.8L6.7 20H4l6.4-7.2L4 4Z"
+        d="M14 8h3V4h-3c-2.8 0-5 2.2-5 5v3H6v4h3v4h4v-4h3.2l.8-4H13V9c0-.6.4-1 1-1Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.55"
+      />
+    </svg>
+  );
+}
+
+export function InstagramIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24">
+      <path
+        d="M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5Zm4 5.5A3.5 3.5 0 1 0 12 15.5a3.5 3.5 0 0 0 0-7Zm5-.75a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"

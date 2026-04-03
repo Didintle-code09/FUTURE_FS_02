@@ -3,24 +3,24 @@ import { AnalyticsIcon, DashboardIcon, ExportIcon, LeadsIcon } from './Icons.jsx
 const actions = [
   {
     title: 'Add Lead',
-    description: 'Start a new pipeline record, assign ownership, and capture source details.',
+    description: 'Create a new lead in seconds, assign an owner, and keep every deal moving forward.',
     icon: LeadsIcon,
     action: 'leads',
-    buttonLabel: 'Open Lead Queue',
+    buttonLabel: 'Add a Lead',
   },
   {
     title: 'View All Leads',
-    description: 'Jump straight into the latest opportunities and keep your momentum high.',
+    description: 'See every opportunity in one place and focus on the leads most likely to convert.',
     icon: DashboardIcon,
     action: 'dashboard',
-    buttonLabel: 'See Dashboard',
+    buttonLabel: 'View Pipeline',
   },
   {
     title: 'Export Data',
-    description: 'Preview the CSV export experience and reporting workflow for revenue ops.',
+    description: 'Export your lead data for reporting, handoff, or sharing with the rest of your team.',
     icon: ExportIcon,
     action: 'analytics',
-    buttonLabel: 'Preview Export UI',
+    buttonLabel: 'Export Insights',
   },
 ];
 
@@ -29,10 +29,10 @@ function QuickActions({ onNavigate }) {
     <div className="section-frame quick-actions-grid">
       <div className="section-copy-block">
         <span className="section-label">Quick Actions</span>
-        <h2 className="section-title">Built to feel production-ready on day one.</h2>
+        <h2 className="section-title">Everything your team needs to move faster.</h2>
         <p className="section-copy">
-          Use this section as the bridge between your polished landing page and the workflows your team will run
-          every day.
+          From capturing new prospects to tracking progress and reporting results, LeadNest keeps your sales work
+          organized and easy to act on.
         </p>
 
         <div className="action-grid">
@@ -62,7 +62,7 @@ function QuickActions({ onNavigate }) {
           </div>
           <div>
             <span className="analytics-label">Pipeline Intelligence</span>
-            <h3>Everything is staged for backend integration.</h3>
+            <h3>See exactly where your pipeline is gaining momentum.</h3>
           </div>
         </div>
 
@@ -94,18 +94,17 @@ function QuickActions({ onNavigate }) {
 
         <div className="endpoint-list">
           <div className="endpoint-pill">
-            <span>GET</span>
-            <code>/api/leads</code>
+            <span>Fast</span>
+            <code>Lead capture</code>
           </div>
           <div className="endpoint-pill">
-            <span>POST</span>
-            <code>/api/leads</code>
+            <span>Clear</span>
+            <code>Sales visibility</code>
           </div>
         </div>
 
         <p className="analytics-footnote">
-          The homepage is using mock data for now, but the structure is already aligned to your existing API
-          service layer.
+          LeadNest helps your team respond faster, stay organized, and turn more opportunities into closed deals.
         </p>
       </aside>
     </div>

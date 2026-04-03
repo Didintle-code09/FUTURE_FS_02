@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Dashboard from './components/Dashboard.jsx';
 import LoginForm from './components/LoginForm.jsx';
 import RegisterForm from './components/RegisterForm.jsx';
+import AboutPage from './components/home/AboutPage.jsx';
 import Footer from './components/home/Footer.jsx';
 import Hero from './components/home/Hero.jsx';
 import LeadsPreview from './components/home/LeadsPreview.jsx';
@@ -11,15 +12,18 @@ import QuickActions from './components/home/QuickActions.jsx';
 import SectionReveal from './components/home/SectionReveal.jsx';
 import StatsCards from './components/home/StatsCards.jsx';
 import { ArrowUpIcon, MoonIcon, SunIcon } from './components/home/Icons.jsx';
+import { aboutProfile } from './data/aboutProfile.js';
 import { mockLeads } from './data/mockLeads.js';
 import { authAPI } from './services/api';
 
-const THEME_STORAGE_KEY = 'leadforge-theme';
+const THEME_MODE_KEY = 'leadnest-theme-mode';
 
 function App() {
-  const [theme, setTheme] = useState('light');
+  const [themeMode, setThemeMode] = useState('system');
+  const [systemTheme, setSystemTheme] = useState('light');
   const [page, setPage] = useState('welcome');
   const [activeSection, setActiveSection] = useState('home');
+  const [pendingSection, setPendingSection] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -27,17 +31,43 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const theme = themeMode === 'system' ? systemTheme : themeMode;
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const updateTheme = (event) => {
+      setSystemTheme(event.matches ? 'dark' : 'light');
+    };
+
+    const savedThemeMode = localStorage.getItem(THEME_MODE_KEY);
+    if (savedThemeMode === 'light' || savedThemeMode === 'dark' || savedThemeMode === 'system') {
+      setThemeMode(savedThemeMode);
+    }
+
+    updateTheme(mediaQuery);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', updateTheme);
+    } else {
+      mediaQuery.addListener(updateTheme);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', updateTheme);
+      } else {
+        mediaQuery.removeListener(updateTheme);
+      }
+    };
   }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem(THEME_MODE_KEY, themeMode);
+  }, [themeMode]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -119,6 +149,27 @@ function App() {
     };
   }, [page]);
 
+  useEffect(() => {
+    if (page !== 'welcome' || !pendingSection) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      const target = document.getElementById(pendingSection);
+
+      if (!target) {
+        return;
+      }
+
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setPendingSection(null);
+    }, 120);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [page, pendingSection]);
+
   const stats = [
     {
       label: 'Total Leads',
@@ -146,12 +197,11 @@ function App() {
     },
   ];
 
-  const toggleTheme = () => {
-    setTheme((currentTheme) => (currentTheme === 'light' ? 'dark' : 'light'));
-  };
-
   const openPage = (nextPage) => {
     setMobileMenuOpen(false);
+    if (nextPage !== 'welcome') {
+      setPendingSection(null);
+    }
     setPage(nextPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -176,10 +226,37 @@ function App() {
 
   const navigateToSection = (sectionId) => {
     const target = document.getElementById(sectionId);
+
+    if (!target && sectionId === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setMobileMenuOpen(false);
+      return;
+    }
+
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     setMobileMenuOpen(false);
+  };
+
+  const handleMarketingNavigation = (destination) => {
+    if (destination === 'about') {
+      openPage('about');
+      return;
+    }
+
+    if (destination === 'dashboard') {
+      openDashboard();
+      return;
+    }
+
+    if (page !== 'welcome') {
+      setPendingSection(destination === 'home' ? null : destination);
+      openPage('welcome');
+      return;
+    }
+
+    navigateToSection(destination);
   };
 
   const handleLoginSuccess = (token, userData) => {
@@ -203,9 +280,23 @@ function App() {
     openPage('welcome');
   };
 
+  const toggleTheme = () => {
+    setThemeMode((currentMode) => {
+      if (currentMode === 'system') {
+        return theme === 'light' ? 'dark' : 'light';
+      }
+
+      if (currentMode === 'dark') {
+        return 'light';
+      }
+
+      return 'system';
+    });
+  };
+
   const renderThemeToggle = () => (
     <button
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      aria-label={`Theme mode: ${themeMode}. Current appearance: ${theme}. Tap to change theme mode.`}
       className="theme-toggle"
       onClick={toggleTheme}
       type="button"
@@ -216,6 +307,7 @@ function App() {
       <span className={`theme-icon ${theme === 'dark' ? 'is-visible' : ''}`}>
         <SunIcon />
       </span>
+      <span className="theme-mode-indicator">{themeMode === 'system' ? 'Auto' : themeMode === 'dark' ? 'Dark' : 'Light'}</span>
     </button>
   );
 
@@ -224,7 +316,7 @@ function App() {
       <div className="loading-screen">
         <div className="loading-panel panel-card">
           <LogoMark />
-          <h1>Loading LeadForge</h1>
+          <h1>Loading LeadNest</h1>
           <p>Checking your workspace and preparing the right next step.</p>
         </div>
       </div>
@@ -241,7 +333,7 @@ function App() {
             <button className="brand-lockup" onClick={() => openPage('welcome')} type="button">
               <LogoMark />
               <div className="brand-copy">
-                <span className="brand-name">LeadForge</span>
+                <span className="brand-name">LeadNest</span>
                 <span className="brand-tag">Track leads, close deals, grow smarter.</span>
               </div>
             </button>
@@ -263,7 +355,7 @@ function App() {
               <p>
                 {isLoginPage
                   ? 'Your welcome page is now separate from the product workspace, so returning users can jump straight into leads and follow ups.'
-                  : 'Create an account to unlock the authenticated dashboard, lead management tools, and the workflow engine behind LeadForge.'}
+                  : 'Create an account to unlock the authenticated dashboard, lead management tools, and the workflow engine behind LeadNest.'}
               </p>
 
               <div className="auth-feature-list">
@@ -273,7 +365,7 @@ function App() {
                 </div>
                 <div className="auth-feature-item">
                   <strong>Theme persistence</strong>
-                  <span>Light and dark mode carry through every page in the flow.</span>
+                  <span>The interface automatically follows the theme from the user device.</span>
                 </div>
                 <div className="auth-feature-item">
                   <strong>API ready foundation</strong>
@@ -298,6 +390,42 @@ function App() {
     );
   }
 
+  if (page === 'about') {
+    return (
+      <div className="about-page">
+        <header className={`portal-header ${isScrolled ? 'is-scrolled' : ''}`}>
+          <div className="section-frame portal-header-inner">
+            <button className="brand-lockup" onClick={() => openPage('welcome')} type="button">
+              <LogoMark />
+              <div className="brand-copy">
+                <span className="brand-name">LeadNest</span>
+                <span className="brand-tag">Founder story and product vision</span>
+              </div>
+            </button>
+
+            <div className="portal-actions">
+              <button className="secondary-button compact-button" onClick={() => openPage('welcome')} type="button">
+                Welcome Page
+              </button>
+              {renderThemeToggle()}
+            </div>
+          </div>
+        </header>
+
+        <AboutPage
+          onBackHome={() => openPage('welcome')}
+          onOpenDashboard={openDashboard}
+          onOpenSignup={() => openAuthPage('signup')}
+          profile={aboutProfile}
+        />
+
+        <SectionReveal as="footer" className="site-footer" trackSection={false}>
+          <Footer onNavigate={handleMarketingNavigation} />
+        </SectionReveal>
+      </div>
+    );
+  }
+
   if (page === 'dashboard' && isAuthenticated) {
     return (
       <div className="dashboard-page">
@@ -306,13 +434,13 @@ function App() {
             <button className="brand-lockup" onClick={() => openPage('welcome')} type="button">
               <LogoMark />
               <div className="brand-copy">
-                <span className="brand-name">LeadForge</span>
+                <span className="brand-name">LeadNest</span>
                 <span className="brand-tag">Your authenticated CRM workspace</span>
               </div>
             </button>
 
             <div className="portal-actions">
-              <div className="portal-user-chip">Welcome, {user?.username || 'LeadForge team'}</div>
+              <div className="portal-user-chip">Welcome, {user?.username || 'LeadNest team'}</div>
               <button className="secondary-button compact-button" onClick={() => openPage('welcome')} type="button">
                 Welcome Page
               </button>
@@ -327,7 +455,7 @@ function App() {
         <main className="dashboard-page-main">
           <div className="section-frame dashboard-intro">
             <span className="section-label">Dashboard</span>
-            <h1 className="section-title">Welcome back, {user?.username || 'LeadForge team'}.</h1>
+            <h1 className="section-title">Welcome back, {user?.username || 'LeadNest team'}.</h1>
             <p className="section-copy">
               The welcome experience is now separate from the product workspace, while your existing authenticated
               lead management dashboard stays available behind login.
@@ -349,16 +477,11 @@ function App() {
         isMenuOpen={mobileMenuOpen}
         isScrolled={isScrolled}
         onCta={isAuthenticated ? openDashboard : () => openAuthPage('signup')}
-        onNavigate={(destination) => {
-          if (destination === 'dashboard') {
-            openDashboard();
-            return;
-          }
-          navigateToSection(destination);
-        }}
+        onNavigate={handleMarketingNavigation}
         onToggleMenu={() => setMobileMenuOpen((isOpen) => !isOpen)}
         onToggleTheme={toggleTheme}
         theme={theme}
+        themeMode={themeMode}
       />
 
       <main className="site-main">
@@ -381,12 +504,12 @@ function App() {
         </SectionReveal>
 
         <SectionReveal className="actions-section" id="analytics">
-          <QuickActions onNavigate={(destination) => (destination === 'dashboard' ? openDashboard() : navigateToSection(destination))} />
+          <QuickActions onNavigate={handleMarketingNavigation} />
         </SectionReveal>
       </main>
 
       <SectionReveal as="footer" className="site-footer" trackSection={false}>
-        <Footer onNavigate={(destination) => (destination === 'dashboard' ? openDashboard() : navigateToSection(destination))} />
+        <Footer onNavigate={handleMarketingNavigation} />
       </SectionReveal>
 
       <button

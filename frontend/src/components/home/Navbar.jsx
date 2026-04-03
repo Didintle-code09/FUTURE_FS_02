@@ -3,6 +3,7 @@ import { ArrowRightIcon, CloseIcon, MenuIcon, MoonIcon, SunIcon } from './Icons.
 
 const navItems = [
   { id: 'home', label: 'Home' },
+  { id: 'about', label: 'About' },
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'leads', label: 'Leads' },
   { id: 'analytics', label: 'Analytics' },
@@ -19,6 +20,7 @@ function Navbar({
   onToggleMenu,
   onToggleTheme,
   theme,
+  themeMode,
 }) {
   return (
     <>
@@ -27,7 +29,7 @@ function Navbar({
           <button className="brand-lockup" onClick={() => onNavigate('home')} type="button">
             <LogoMark />
             <div className="brand-copy">
-              <span className="brand-name">LeadForge</span>
+              <span className="brand-name">LeadNest</span>
               <span className="brand-tag">Close deals with clarity</span>
             </div>
           </button>
@@ -48,7 +50,7 @@ function Navbar({
 
           <div className="navbar-actions">
             <button
-              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              aria-label={`Theme mode: ${themeMode}. Current appearance: ${theme}. Tap to change theme mode.`}
               className="theme-toggle"
               onClick={onToggleTheme}
               type="button"
@@ -59,6 +61,7 @@ function Navbar({
               <span className={`theme-icon ${theme === 'dark' ? 'is-visible' : ''}`}>
                 <SunIcon />
               </span>
+              <span className="theme-mode-indicator">{themeMode === 'system' ? 'Auto' : themeMode === 'dark' ? 'Dark' : 'Light'}</span>
             </button>
 
             <button className="nav-cta" onClick={onCta} type="button">
@@ -86,7 +89,7 @@ function Navbar({
           <div className="brand-lockup">
             <LogoMark />
             <div className="brand-copy">
-              <span className="brand-name">LeadForge</span>
+              <span className="brand-name">LeadNest</span>
               <span className="brand-tag">Track leads, grow smarter</span>
             </div>
           </div>
@@ -111,7 +114,13 @@ function Navbar({
 
         <div className="mobile-drawer-footer">
           <button className="theme-toggle full-width" onClick={onToggleTheme} type="button">
-            <span>{theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}</span>
+            <span>
+              {themeMode === 'system'
+                ? `Auto Theme (${theme})`
+                : themeMode === 'dark'
+                  ? 'Manual Dark Mode'
+                  : 'Manual Light Mode'}
+            </span>
             {theme === 'light' ? <MoonIcon /> : <SunIcon />}
           </button>
           <button className="nav-cta full-width" onClick={onCta} type="button">

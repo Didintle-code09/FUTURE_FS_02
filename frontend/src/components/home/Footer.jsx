@@ -1,5 +1,5 @@
 import LogoMark from './LogoMark.jsx';
-import { GitHubIcon, LinkedInIcon, TwitterIcon } from './Icons.jsx';
+import { FacebookIcon, GitHubIcon, InstagramIcon, LinkedInIcon } from './Icons.jsx';
 
 const footerGroups = [
   {
@@ -14,7 +14,7 @@ const footerGroups = [
   {
     title: 'Company',
     links: [
-      { label: 'About', action: 'home' },
+      { label: 'About', action: 'about' },
       { label: 'Contact', action: 'analytics' },
       { label: 'Support', action: 'analytics' },
       { label: 'Privacy Policy', action: 'home' },
@@ -23,9 +23,10 @@ const footerGroups = [
 ];
 
 const socialLinks = [
-  { href: 'https://github.com', label: 'GitHub', icon: GitHubIcon },
-  { href: 'https://linkedin.com', label: 'LinkedIn', icon: LinkedInIcon },
-  { href: 'https://x.com', label: 'Twitter', icon: TwitterIcon },
+  { href: 'https://github.com/Didintle-code09', label: 'GitHub', icon: GitHubIcon },
+  { href: 'https://www.linkedin.com/in/didintle-moratamotho-695196374/', label: 'LinkedIn', icon: LinkedInIcon },
+  { href: 'https://www.facebook.com/share/1CQJREKgfM/', label: 'Facebook', icon: FacebookIcon },
+  { href: 'https://www.instagram.com/didintle.asf?igsh=MWs5MDZ3MmNuZmlnaw==', label: 'Instagram', icon: InstagramIcon },
 ];
 
 function Footer({ onNavigate }) {
@@ -38,7 +39,7 @@ function Footer({ onNavigate }) {
           <div className="brand-lockup footer-brand-lockup">
             <LogoMark />
             <div className="brand-copy">
-              <span className="brand-name">LeadForge</span>
+              <span className="brand-name">LeadNest</span>
               <span className="brand-tag">Track leads, close deals, grow smarter.</span>
             </div>
           </div>
@@ -53,7 +54,7 @@ function Footer({ onNavigate }) {
               Stay in the loop
             </label>
             <div className="newsletter-row">
-              <input id="newsletter-email" placeholder="team@leadforge.app" type="email" />
+              <input id="newsletter-email" placeholder="team@leadnest.app" type="email" />
               <button type="button">Join</button>
             </div>
           </form>
@@ -92,8 +93,8 @@ function Footer({ onNavigate }) {
       </div>
 
       <div className="footer-bottom">
-        <p>Built with LeadForge CRM</p>
-        <p>Copyright 2026 LeadForge. All rights reserved.</p>
+        <p>Built with LeadNest CRM</p>
+        <p>Copyright 2026 LeadNest. All rights reserved.</p>
       </div>
     </div>
   );
