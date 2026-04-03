@@ -7,8 +7,17 @@ function RegisterForm({ onSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const passwordChecks = [
+    { label: 'Use at least 8 characters for a stronger password', met: password.length >= 8 },
+    { label: 'Add an uppercase letter', met: /[A-Z]/.test(password) },
+    { label: 'Add a number', met: /\d/.test(password) },
+    { label: 'Add a special character', met: /[^A-Za-z0-9]/.test(password) },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +35,11 @@ function RegisterForm({ onSuccess }) {
       const { token, user } = response.data;
       onSuccess(token, user);
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      if (!err.response) {
+        setError('Sign up is unavailable right now. Make sure the backend server is running on http://localhost:5000 and the Supabase setup is complete.');
+      } else {
+        setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -37,6 +50,10 @@ function RegisterForm({ onSuccess }) {
       <h2>Register</h2>
 
       {error && <div className="error-message">{error}</div>}
+
+      <div className="auth-note">
+        Sign up needs the backend API running locally on `http://localhost:5000`. Lead storage will need the Supabase leads table from `supabase/schema.sql`.
+      </div>
 
       <div className="form-group">
         <label htmlFor="username">Username</label>
@@ -64,28 +81,58 @@ function RegisterForm({ onSuccess }) {
 
       <div className="form-group">
         <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-          required
-          minLength="6"
-        />
+        <div className="password-field">
+          <input
+            id="password"
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+            required
+            minLength="6"
+          />
+          <button
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            className="password-toggle"
+            onClick={() => setShowPassword((current) => !current)}
+            type="button"
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </button>
+        </div>
+        <div className="password-guidance">
+          <p>Password recommendations</p>
+          <div className="password-checklist">
+            {passwordChecks.map((check) => (
+              <span className={`password-check ${check.met ? 'met' : ''}`} key={check.label}>
+                {check.label}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="form-group">
         <label htmlFor="passwordConfirm">Confirm Password</label>
-        <input
-          id="passwordConfirm"
-          type="password"
-          value={passwordConfirm}
-          onChange={(e) => setPasswordConfirm(e.target.value)}
-          placeholder="Confirm your password"
-          required
-          minLength="6"
-        />
+        <div className="password-field">
+          <input
+            id="passwordConfirm"
+            type={showPasswordConfirm ? 'text' : 'password'}
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            placeholder="Confirm your password"
+            required
+            minLength="6"
+          />
+          <button
+            aria-label={showPasswordConfirm ? 'Hide confirm password' : 'Show confirm password'}
+            className="password-toggle"
+            onClick={() => setShowPasswordConfirm((current) => !current)}
+            type="button"
+          >
+            {showPasswordConfirm ? 'Hide' : 'Show'}
+          </button>
+        </div>
       </div>
 
       <button

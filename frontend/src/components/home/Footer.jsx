@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import LogoMark from './LogoMark.jsx';
 import { FacebookIcon, GitHubIcon, InstagramIcon, LinkedInIcon } from './Icons.jsx';
 
@@ -17,7 +18,7 @@ const footerGroups = [
       { label: 'About', action: 'about' },
       { label: 'Contact', action: 'analytics' },
       { label: 'Support', action: 'analytics' },
-      { label: 'Privacy Policy', action: 'home' },
+      { label: 'Privacy Policy', action: 'privacy' },
     ],
   },
 ];
@@ -30,6 +31,57 @@ const socialLinks = [
 ];
 
 function Footer({ onNavigate }) {
+  const [email, setEmail] = useState('');
+  const [messageText, setMessageText] = useState('');
+  const [status, setStatus] = useState('idle');
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_NEWSLETTER_ENDPOINT;
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!formspreeEndpoint) {
+      setStatus('error');
+      setFeedbackMessage('Add your Formspree endpoint to activate this contact form.');
+      return;
+    }
+
+    setStatus('submitting');
+    setFeedbackMessage('');
+
+    try {
+      const formData = new FormData(event.currentTarget);
+
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        setEmail('');
+        setMessageText('');
+        setStatus('success');
+        setFeedbackMessage('Thanks for reaching out. Your message has been sent.');
+        event.currentTarget.reset();
+        return;
+      }
+
+      const data = await response.json().catch(() => null);
+      const errorMessage = Array.isArray(data?.errors)
+        ? data.errors.map((item) => item.message).join(', ')
+        : 'That did not go through. Please try again in a moment.';
+
+      setStatus('error');
+      setFeedbackMessage(errorMessage);
+    } catch {
+      setStatus('error');
+      setFeedbackMessage('That did not go through. Check your internet connection and try again.');
+    }
+  };
+
   return (
     <div className="section-frame footer-frame">
       <div className="footer-divider" />
@@ -49,14 +101,42 @@ function Footer({ onNavigate }) {
             that feels ready to ship.
           </p>
 
-          <form className="newsletter-form">
+          <form action={formspreeEndpoint || undefined} className="newsletter-form" method="POST" onSubmit={handleSubmit}>
             <label className="newsletter-label" htmlFor="newsletter-email">
-              Stay in the loop
+              Send a message
             </label>
+            <input name="source" type="hidden" value="LeadNest footer contact form" />
             <div className="newsletter-row">
-              <input id="newsletter-email" placeholder="team@leadnest.app" type="email" />
-              <button type="button">Join</button>
+              <input
+                autoComplete="email"
+                id="newsletter-email"
+                name="email"
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="team@leadnest.app"
+                required
+                type="email"
+                value={email}
+              />
             </div>
+            <textarea
+              className="newsletter-message"
+              id="newsletter-message"
+              name="message"
+              onChange={(event) => setMessageText(event.target.value)}
+              placeholder="Write your message here..."
+              required
+              rows="4"
+              value={messageText}
+            />
+            <div className="newsletter-actions">
+              <button disabled={status === 'submitting'} type="submit">
+                {status === 'submitting' ? 'Sending...' : 'Send Message'}
+              </button>
+              <p className={`newsletter-feedback ${status === 'error' ? 'is-error' : status === 'success' ? 'is-success' : ''}`}>
+                {feedbackMessage || (formspreeEndpoint ? 'Powered by Formspree.' : 'Set VITE_FORMSPREE_NEWSLETTER_ENDPOINT to enable Formspree.')}
+              </p>
+            </div>
+            <p className="newsletter-helper">Drop your email and message here and Formspree will send it through.</p>
           </form>
         </div>
 

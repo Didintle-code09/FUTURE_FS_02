@@ -3,36 +3,42 @@ import { AnalyticsIcon, DashboardIcon, ExportIcon, LeadsIcon } from './Icons.jsx
 const actions = [
   {
     title: 'Add Lead',
-    description: 'Create a new lead in seconds, assign an owner, and keep every deal moving forward.',
+    description: 'Capture a new lead in seconds and keep every opportunity organised from first contact onward.',
     icon: LeadsIcon,
-    action: 'leads',
+    action: 'add-lead',
     buttonLabel: 'Add a Lead',
   },
   {
     title: 'View All Leads',
-    description: 'See every opportunity in one place and focus on the leads most likely to convert.',
+    description: 'See every opportunity in one place and focus on the leads that need action next.',
     icon: DashboardIcon,
     action: 'dashboard',
     buttonLabel: 'View Pipeline',
   },
   {
     title: 'Export Data',
-    description: 'Export your lead data for reporting, handoff, or sharing with the rest of your team.',
+    description: 'Export your lead data for reporting, handoff, or sharing with clients and collaborators.',
     icon: ExportIcon,
-    action: 'analytics',
+    action: 'export-data',
     buttonLabel: 'Export Insights',
   },
 ];
 
-function QuickActions({ onNavigate }) {
+function QuickActions({ leads, onNavigate }) {
+  const totalLeads = leads.length;
+  const newLeads = leads.filter((lead) => lead.status === 'new').length;
+  const contactedLeads = leads.filter((lead) => lead.status === 'contacted').length;
+  const convertedLeads = leads.filter((lead) => lead.status === 'converted').length;
+  const safeWidth = (count) => (totalLeads ? (count / totalLeads) * 100 : 0);
+
   return (
     <div className="section-frame quick-actions-grid">
       <div className="section-copy-block">
         <span className="section-label">Quick Actions</span>
-        <h2 className="section-title">Everything your team needs to move faster.</h2>
+        <h2 className="section-title">Everything your team needs to move faster in one place.</h2>
         <p className="section-copy">
           From capturing new prospects to tracking progress and reporting results, LeadNest keeps your sales work
-          organized and easy to act on.
+          organised and easy to act on for South African teams and growing businesses.
         </p>
 
         <div className="action-grid">
@@ -61,50 +67,58 @@ function QuickActions({ onNavigate }) {
             <AnalyticsIcon />
           </div>
           <div>
-            <span className="analytics-label">Pipeline Intelligence</span>
-            <h3>See exactly where your pipeline is gaining momentum.</h3>
+            <span className="analytics-label">Pipeline View</span>
+            <h3>See the live breakdown of your actual pipeline.</h3>
           </div>
         </div>
 
-        <div className="analytics-stack">
-          <div className="analytics-row">
-            <span>Inbound to contacted</span>
-            <strong>68%</strong>
-          </div>
-          <div className="progress-rail">
-            <span style={{ width: '68%' }} />
-          </div>
+        {totalLeads ? (
+          <div className="analytics-stack">
+            <div className="analytics-row">
+              <span>New leads</span>
+              <strong>{newLeads}</strong>
+            </div>
+            <div className="progress-rail">
+              <span style={{ width: `${safeWidth(newLeads)}%` }} />
+            </div>
 
-          <div className="analytics-row">
-            <span>Meeting to proposal</span>
-            <strong>54%</strong>
-          </div>
-          <div className="progress-rail">
-            <span style={{ width: '54%' }} />
-          </div>
+            <div className="analytics-row">
+              <span>Contacted leads</span>
+              <strong>{contactedLeads}</strong>
+            </div>
+            <div className="progress-rail">
+              <span style={{ width: `${safeWidth(contactedLeads)}%` }} />
+            </div>
 
-          <div className="analytics-row">
-            <span>Proposal to close</span>
-            <strong>31%</strong>
+            <div className="analytics-row">
+              <span>Converted leads</span>
+              <strong>{convertedLeads}</strong>
+            </div>
+            <div className="progress-rail">
+              <span style={{ width: `${safeWidth(convertedLeads)}%` }} />
+            </div>
           </div>
-          <div className="progress-rail">
-            <span style={{ width: '31%' }} />
+        ) : (
+          <div className="analytics-empty-state">
+            <strong>No live pipeline data yet.</strong>
+            <p>Add your first lead and this panel will start reflecting your real activity.</p>
           </div>
-        </div>
+        )}
 
         <div className="endpoint-list">
           <div className="endpoint-pill">
-            <span>Fast</span>
-            <code>Lead capture</code>
+            <span>South Africa</span>
+            <code>Local workflow</code>
           </div>
           <div className="endpoint-pill">
-            <span>Clear</span>
-            <code>Sales visibility</code>
+            <span>Real</span>
+            <code>Live pipeline data</code>
           </div>
         </div>
 
         <p className="analytics-footnote">
-          LeadNest helps your team respond faster, stay organized, and turn more opportunities into closed deals.
+          LeadNest helps your team stay organised, respond faster, and work from actual pipeline activity instead
+          of inflated dashboard numbers.
         </p>
       </aside>
     </div>

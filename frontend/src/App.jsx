@@ -8,13 +8,13 @@ import Hero from './components/home/Hero.jsx';
 import LeadsPreview from './components/home/LeadsPreview.jsx';
 import LogoMark from './components/home/LogoMark.jsx';
 import Navbar from './components/home/Navbar.jsx';
+import PrivacyPolicyPage from './components/home/PrivacyPolicyPage.jsx';
 import QuickActions from './components/home/QuickActions.jsx';
 import SectionReveal from './components/home/SectionReveal.jsx';
 import StatsCards from './components/home/StatsCards.jsx';
 import { ArrowUpIcon, MoonIcon, SunIcon } from './components/home/Icons.jsx';
 import { aboutProfile } from './data/aboutProfile.js';
-import { mockLeads } from './data/mockLeads.js';
-import { authAPI } from './services/api';
+import { authAPI, leadsAPI } from './services/api';
 
 const THEME_MODE_KEY = 'leadnest-theme-mode';
 
@@ -24,10 +24,11 @@ function App() {
   const [page, setPage] = useState('welcome');
   const [activeSection, setActiveSection] = useState('home');
   const [pendingSection, setPendingSection] = useState(null);
+  const [dashboardAction, setDashboardAction] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [leads] = useState(mockLeads);
+  const [leads, setLeads] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -170,29 +171,47 @@ function App() {
     };
   }, [page, pendingSection]);
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setLeads([]);
+      return;
+    }
+
+    const loadLeads = async () => {
+      try {
+        const response = await leadsAPI.getAllLeads();
+        setLeads(response.data.data || []);
+      } catch {
+        setLeads([]);
+      }
+    };
+
+    loadLeads();
+  }, [isAuthenticated]);
+
   const stats = [
     {
       label: 'Total Leads',
       value: leads.length,
-      detail: '+18% from last month',
+      detail: leads.length ? 'Live records currently in your pipeline.' : 'Your pipeline is ready for its first lead.',
       icon: 'stack',
     },
     {
       label: 'New Leads',
       value: leads.filter((lead) => lead.status === 'new').length,
-      detail: '6 inbound this week',
+      detail: 'Fresh enquiries waiting for first contact.',
       icon: 'spark',
     },
     {
       label: 'Contacted Leads',
       value: leads.filter((lead) => lead.status === 'contacted').length,
-      detail: '2 follow ups due today',
+      detail: 'People you have already reached out to.',
       icon: 'chat',
     },
     {
       label: 'Converted Leads',
       value: leads.filter((lead) => lead.status === 'converted').length,
-      detail: '31% close rate in Q2',
+      detail: 'Closed opportunities tracked in your workspace.',
       icon: 'trophy',
     },
   ];
@@ -215,7 +234,9 @@ function App() {
     openPage(nextPage);
   };
 
-  const openDashboard = () => {
+  const openDashboard = (nextAction = null) => {
+    setDashboardAction(nextAction);
+
     if (isAuthenticated) {
       openPage('dashboard');
       return;
@@ -245,8 +266,23 @@ function App() {
       return;
     }
 
+    if (destination === 'privacy') {
+      openPage('privacy');
+      return;
+    }
+
     if (destination === 'dashboard') {
       openDashboard();
+      return;
+    }
+
+    if (destination === 'add-lead') {
+      openDashboard('add-lead');
+      return;
+    }
+
+    if (destination === 'export-data') {
+      openDashboard('export-data');
       return;
     }
 
@@ -426,6 +462,40 @@ function App() {
     );
   }
 
+  if (page === 'privacy') {
+    return (
+      <div className="about-page">
+        <header className={`portal-header ${isScrolled ? 'is-scrolled' : ''}`}>
+          <div className="section-frame portal-header-inner">
+            <button className="brand-lockup" onClick={() => openPage('welcome')} type="button">
+              <LogoMark />
+              <div className="brand-copy">
+                <span className="brand-name">LeadNest</span>
+                <span className="brand-tag">Privacy information and data handling</span>
+              </div>
+            </button>
+
+            <div className="portal-actions">
+              <button className="secondary-button compact-button" onClick={() => openPage('welcome')} type="button">
+                Welcome Page
+              </button>
+              {renderThemeToggle()}
+            </div>
+          </div>
+        </header>
+
+        <PrivacyPolicyPage
+          onBackHome={() => openPage('welcome')}
+          onOpenDashboard={openDashboard}
+        />
+
+        <SectionReveal as="footer" className="site-footer" trackSection={false}>
+          <Footer onNavigate={handleMarketingNavigation} />
+        </SectionReveal>
+      </div>
+    );
+  }
+
   if (page === 'dashboard' && isAuthenticated) {
     return (
       <div className="dashboard-page">
@@ -462,7 +532,10 @@ function App() {
             </p>
           </div>
 
-          <Dashboard />
+          <Dashboard
+            launchAction={dashboardAction}
+            onActionHandled={() => setDashboardAction(null)}
+          />
         </main>
       </div>
     );
@@ -504,7 +577,7 @@ function App() {
         </SectionReveal>
 
         <SectionReveal className="actions-section" id="analytics">
-          <QuickActions onNavigate={handleMarketingNavigation} />
+          <QuickActions leads={leads} onNavigate={handleMarketingNavigation} />
         </SectionReveal>
       </main>
 

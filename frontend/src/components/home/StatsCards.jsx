@@ -12,10 +12,9 @@ function StatsCards({ stats }) {
     <div className="section-frame">
       <div className="section-copy-block">
         <span className="section-label">Performance Snapshot</span>
-        <h2 className="section-title">A homepage that feels like your command center.</h2>
+        <h2 className="section-title">A homepage built around real pipeline activity.</h2>
         <p className="section-copy">
-          Monitor the health of your funnel at a glance with bright, responsive cards that stay legible in both
-          light and dark mode.
+          See the live state of your leads at a glance, without inflated figures or placeholder performance claims.
         </p>
       </div>
 

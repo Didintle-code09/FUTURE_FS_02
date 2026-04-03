@@ -8,3 +8,6 @@
 
   [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
 [2m04:02:42[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mindex.html[22m
+[2m04:25:54[22m [36m[1m[vite][22m[39m [32m.env.local changed, restarting server...[39m
+[2m04:25:54[22m [36m[1m[vite][22m[39m server restarted.
+[2m05:28:35[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mindex.html[22m

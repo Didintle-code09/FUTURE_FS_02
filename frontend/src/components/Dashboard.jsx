@@ -4,7 +4,7 @@ import LeadCard from './LeadCard.jsx';
 import LeadForm from './LeadForm.jsx';
 import '../styles/dashboard.css';
 
-function Dashboard() {
+function Dashboard({ launchAction, onActionHandled }) {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -15,6 +15,29 @@ function Dashboard() {
   useEffect(() => {
     fetchLeads();
   }, []);
+
+  useEffect(() => {
+    if (!launchAction) {
+      return;
+    }
+
+    if (launchAction === 'add-lead') {
+      setEditingLead(null);
+      setShowForm(true);
+      setError('');
+      onActionHandled?.();
+      return;
+    }
+
+    if (launchAction === 'export-data') {
+      if (loading) {
+        return;
+      }
+
+      exportLeads();
+      onActionHandled?.();
+    }
+  }, [launchAction, loading, leads]);
 
   const fetchLeads = async () => {
     try {
@@ -28,6 +51,47 @@ function Dashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const exportLeads = () => {
+    if (!leads.length) {
+      setError('There are no leads to export yet.');
+      return;
+    }
+
+    const rows = [
+      ['Name', 'Email', 'Phone Number', 'Company', 'Source', 'Status', 'Created At'],
+      ...leads.map((lead) => [
+        lead.name || '',
+        lead.email || '',
+        lead.phoneNumber || '',
+        lead.company || '',
+        lead.source || '',
+        lead.status || '',
+        lead.createdAt || '',
+      ]),
+    ];
+
+    const csv = rows
+      .map((row) =>
+        row
+          .map((value) => `"${String(value).replace(/"/g, '""')}"`)
+          .join(',')
+      )
+      .join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const dateLabel = new Date().toISOString().slice(0, 10);
+
+    link.href = url;
+    link.download = `leadnest-leads-${dateLabel}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setError('');
   };
 
   const handleAddLead = async (leadData) => {
@@ -94,15 +158,24 @@ function Dashboard() {
     <div className="dashboard">
       <div className="dashboard-header">
         <h2>Leads Management</h2>
-        <button
-          className="add-lead-btn"
-          onClick={() => {
-            setEditingLead(null);
-            setShowForm(!showForm);
-          }}
-        >
-          {showForm ? 'Close Form' : '+ Add New Lead'}
-        </button>
+        <div className="dashboard-header-actions">
+          <button
+            className="secondary-button compact-button"
+            onClick={exportLeads}
+            type="button"
+          >
+            Export CSV
+          </button>
+          <button
+            className="add-lead-btn"
+            onClick={() => {
+              setEditingLead(null);
+              setShowForm(!showForm);
+            }}
+          >
+            {showForm ? 'Close Form' : '+ Add New Lead'}
+          </button>
+        </div>
       </div>
 
       {error && <div className="error-message">{error}</div>}

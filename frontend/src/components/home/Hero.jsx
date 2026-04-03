@@ -9,6 +9,11 @@ function Hero({
   primaryLabel = 'Go to Dashboard',
   secondaryLabel = 'Add New Lead',
 }) {
+  const totalLeads = leads.length;
+  const newLeads = leads.filter((lead) => lead.status === 'new').length;
+  const activeSources = new Set(leads.map((lead) => lead.source).filter(Boolean)).size;
+  const recentLeads = leads.slice(0, 4);
+
   return (
     <div className="section-frame hero-shell">
       <HeroBackground />
@@ -17,12 +22,12 @@ function Hero({
         <div className="hero-copy">
           <span className="eyebrow">
             <span className="eyebrow-dot" />
-            LeadNest CRM
+            South Africa Ready CRM
           </span>
-          <h1>Manage Leads. Close Deals. Grow Faster.</h1>
+          <h1>Manage leads with clarity for South African teams.</h1>
           <p className="hero-subcopy">
-            A simple CRM to track, organize, and convert your clients. LeadNest keeps every touchpoint visible,
-            every opportunity prioritized, and every rep moving with confidence.
+            LeadNest gives small businesses, founders, and growing teams in South Africa a cleaner way to capture,
+            organise, and follow up on real opportunities without clutter or guesswork.
           </p>
 
           <div className="hero-actions">
@@ -37,16 +42,16 @@ function Hero({
 
           <div className="hero-metrics">
             <div className="metric-chip">
-              <strong>31%</strong>
-              <span>higher conversion velocity</span>
+              <strong>{totalLeads}</strong>
+              <span>{totalLeads === 1 ? 'lead currently tracked' : 'leads currently tracked'}</span>
             </div>
             <div className="metric-chip">
-              <strong>4.8h</strong>
-              <span>average first response time</span>
+              <strong>{newLeads}</strong>
+              <span>{newLeads === 1 ? 'new lead needs attention' : 'new leads need attention'}</span>
             </div>
             <div className="metric-chip">
-              <strong>API ready</strong>
-              <span>GET /api/leads and POST /api/leads</span>
+              <strong>{activeSources}</strong>
+              <span>{activeSources === 1 ? 'active source in the pipeline' : 'active sources in the pipeline'}</span>
             </div>
           </div>
         </div>
@@ -61,7 +66,7 @@ function Hero({
                 <LogoMark />
                 <div>
                   <p>LeadNest Pulse</p>
-                  <span>Revenue pipeline snapshot</span>
+                  <span>South Africa pipeline snapshot</span>
                 </div>
               </div>
               <span className="live-pill">Live</span>
@@ -69,32 +74,46 @@ function Hero({
 
             <div className="hero-panel-stats">
               <div>
-                <span>Pipeline Value</span>
-                <strong>$118.4K</strong>
+                <span>Total Leads</span>
+                <strong>{totalLeads}</strong>
               </div>
               <div>
-                <span>Win Probability</span>
-                <strong>74%</strong>
+                <span>Tracked Sources</span>
+                <strong>{activeSources}</strong>
               </div>
             </div>
 
             <div className="hero-lead-list">
-              {leads.map((lead) => (
-                <div className="hero-lead-row" key={lead.id}>
-                  <div>
-                    <strong>{lead.name}</strong>
-                    <span>{lead.company}</span>
+              {recentLeads.length ? (
+                recentLeads.map((lead) => (
+                  <div className="hero-lead-row" key={lead.id || lead._id}>
+                    <div>
+                      <strong>{lead.name}</strong>
+                      <span>{lead.company || 'South African business lead'}</span>
+                    </div>
+                    <div className={`status-pill status-${lead.status}`}>{lead.status}</div>
                   </div>
-                  <div className={`status-pill status-${lead.status}`}>{lead.status}</div>
+                ))
+              ) : (
+                <div className="hero-lead-row">
+                  <div>
+                    <strong>No live leads yet</strong>
+                    <span>Create your first lead to start building your pipeline.</span>
+                  </div>
+                  <div className="status-pill status-new">ready</div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
           <div className="floating-insight panel-card">
             <span>Next best action</span>
-            <strong>Follow up with Jordan and Sofia before 3 PM</strong>
-            <p>Both leads crossed your engagement threshold after the latest outreach.</p>
+            <strong>{recentLeads.length ? 'Keep your newest South African opportunities moving.' : 'Add your first lead and start building momentum.'}</strong>
+            <p>
+              {recentLeads.length
+                ? 'Use the dashboard to update statuses, add notes, and keep every follow-up visible in one place.'
+                : 'Once leads are added, this space will reflect the real activity in your pipeline instead of placeholder metrics.'}
+            </p>
           </div>
         </div>
       </div>
