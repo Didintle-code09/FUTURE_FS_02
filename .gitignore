@@ -11,10 +11,10 @@ node_modules/
 .env.production.local
 
 # Build directories
-/build
-/dist
-/out
-/.next
+build/
+dist/
+out/
+.next/
 
 # Logs
 npm-debug.log*

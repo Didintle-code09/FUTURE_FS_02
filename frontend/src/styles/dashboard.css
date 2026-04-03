@@ -1,130 +1,17 @@
-.dashboard {
-  max-width: 1400px;
-  margin: 2rem auto;
-  padding: 0 20px;
-}
-
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.dashboard-header h2 {
-  font-size: 2rem;
-  color: #333;
-}
-
-.add-lead-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.add-lead-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-.form-container {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  animation: slideDown 0.3s ease;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.filter-section {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.filter-section label {
-  font-weight: 600;
-  color: #333;
-}
-
-.filter-select {
-  padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  background-color: white;
-  transition: border-color 0.3s;
-}
-
-.filter-select:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.leads-container {
-  min-height: 300px;
-}
-
-.leads-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
-}
-
-.no-leads {
-  background: white;
-  padding: 3rem;
-  border-radius: 8px;
-  text-align: center;
-  color: #999;
-  font-size: 1.1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.dashboard-loading {
-  text-align: center;
-  padding: 3rem;
-  font-size: 1.2rem;
-  color: #667eea;
-}
-
-@media (max-width: 768px) {
-  .dashboard-header {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .leads-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .filter-section {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
+.dashboard{max-width:1400px;margin:0 auto;padding:0 1rem 2rem}
+.dashboard-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:2rem}
+.dashboard-header h2{font-size:2rem;color:var(--text)}
+.add-lead-btn{padding:.92rem 1.4rem;border-radius:1rem;background:linear-gradient(135deg,var(--primary),var(--primary-strong));color:#fff;font-size:1rem;font-weight:600;box-shadow:0 18px 40px rgba(124,58,237,.22);transition:transform .3s ease,box-shadow .3s ease}
+.add-lead-btn:hover{transform:translateY(-2px);box-shadow:0 20px 50px rgba(124,58,237,.3)}
+.form-container,.filter-section,.no-leads{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel-strong),var(--surface));border-radius:1.35rem;box-shadow:var(--shadow)}
+:root[data-theme='dark'] .form-container,:root[data-theme='dark'] .filter-section,:root[data-theme='dark'] .no-leads{box-shadow:var(--glow)}
+.form-container{padding:1.4rem;margin-bottom:2rem}
+.filter-section{padding:1.2rem;margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
+.filter-section label{font-weight:600;color:var(--text)}
+.filter-select{padding:.8rem 1rem;border:1px solid var(--line);border-radius:1rem;font-size:1rem;cursor:pointer;background:var(--panel-strong);color:var(--text);transition:border-color .3s ease,box-shadow .3s ease}
+.filter-select:focus{outline:none;border-color:rgba(124,58,237,.44);box-shadow:0 0 0 4px rgba(124,58,237,.12)}
+.leads-container{min-height:300px}
+.leads-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.35rem}
+.no-leads{padding:2.5rem;text-align:center;color:var(--text-muted);font-size:1.05rem}
+.dashboard-loading{text-align:center;padding:3rem;font-size:1.1rem;color:var(--primary-strong)}
+@media (max-width:768px){.dashboard-header,.filter-section{flex-direction:column;align-items:flex-start}.leads-grid{grid-template-columns:1fr}.filter-select{width:100%}}

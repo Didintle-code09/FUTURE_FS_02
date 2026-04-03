@@ -101,7 +101,7 @@ function Dashboard() {
             setShowForm(!showForm);
           }}
         >
-          {showForm ? '✕ Close' : '+ Add New Lead'}
+          {showForm ? 'Close Form' : '+ Add New Lead'}
         </button>
       </div>
 
