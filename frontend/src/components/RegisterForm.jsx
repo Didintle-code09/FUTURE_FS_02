@@ -51,10 +51,6 @@ function RegisterForm({ onSuccess }) {
 
       {error && <div className="error-message">{error}</div>}
 
-      <div className="auth-note">
-        Sign up needs the backend API running locally on `http://localhost:5000`. Lead storage will need the Supabase leads table from `supabase/schema.sql`.
-      </div>
-
       <div className="form-group">
         <label htmlFor="username">Username</label>
         <input
