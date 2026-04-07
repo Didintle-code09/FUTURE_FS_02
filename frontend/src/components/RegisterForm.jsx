@@ -36,7 +36,7 @@ function RegisterForm({ onSuccess }) {
       onSuccess(token, user);
     } catch (err) {
       if (!err.response) {
-        setError('Sign up is unavailable right now. Make sure the backend server is running on http://localhost:5000 and the Supabase setup is complete.');
+        setError('Sign up is unavailable right now.');
       } else {
         setError(err.response?.data?.message || 'Registration failed. Please try again.');
       }

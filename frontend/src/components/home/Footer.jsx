@@ -133,7 +133,7 @@ function Footer({ onNavigate }) {
                 {status === 'submitting' ? 'Sending...' : 'Send Message'}
               </button>
               <p className={`newsletter-feedback ${status === 'error' ? 'is-error' : status === 'success' ? 'is-success' : ''}`}>
-                {feedbackMessage || (formspreeEndpoint ? 'Powered by Formspree.' : 'Set VITE_FORMSPREE_NEWSLETTER_ENDPOINT to enable Formspree.')}
+                {feedbackMessage || (formspreeEndpoint ? 'Powered by Formspree.' : '')}
               </p>
             </div>
             <p className="newsletter-helper">Drop your email and message here and Formspree will send it through.</p>

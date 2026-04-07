@@ -390,22 +390,22 @@ function App() {
               <h1>{isLoginPage ? 'Log in to your dashboard and pick up where you left off.' : 'Sign up and move from interest to revenue faster.'}</h1>
               <p>
                 {isLoginPage
-                  ? 'Your welcome page is now separate from the product workspace, so returning users can jump straight into leads and follow ups.'
+                  ? ''
                   : 'Create an account to unlock the authenticated dashboard, lead management tools, and the workflow engine behind LeadNest.'}
               </p>
 
               <div className="auth-feature-list">
                 <div className="auth-feature-item">
-                  <strong>Responsive onboarding</strong>
-                  <span>Welcome, auth, and dashboard now live as separate views.</span>
+                  <strong>Centralized worskpace</strong>
+                  <span>All your leads, notes, and tasks organized in one clean dashboard.</span>
                 </div>
                 <div className="auth-feature-item">
-                  <strong>Theme persistence</strong>
-                  <span>The interface automatically follows the theme from the user device.</span>
+                  <strong>Smart Analytics</strong>
+                  <span>Gain instant insights into your conversion rates and pipeline health.</span>
                 </div>
                 <div className="auth-feature-item">
-                  <strong>API ready foundation</strong>
-                  <span>Authentication and lead data still connect through your existing service layer.</span>
+                  <strong>Work your way</strong>
+                  <span>A beautiful interface that adapts to you, complete with automatic dark mode.</span>
                 </div>
               </div>
             </section>
