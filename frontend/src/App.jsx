@@ -525,7 +525,7 @@ function App() {
         <main className="dashboard-page-main">
           <div className="section-frame dashboard-intro">
             <span className="section-label">Dashboard</span>
-            <h1 className="section-title">Welcome back, {user?.username || 'LeadNest team'}.</h1>
+            <h1 className="section-title">Welcome, {user?.username || 'LeadNest team'}.</h1>
             <p className="section-copy">
               The welcome experience is now separate from the product workspace, while your existing authenticated
               lead management dashboard stays available behind login.
