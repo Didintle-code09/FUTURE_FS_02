@@ -527,8 +527,7 @@ function App() {
             <span className="section-label">Dashboard</span>
             <h1 className="section-title">Welcome, {user?.username || 'LeadNest team'}.</h1>
             <p className="section-copy">
-              The welcome experience is now separate from the product workspace, while your existing authenticated
-              lead management dashboard stays available behind login.
+              You are now logged in and can access your authenticated CRM workspace.
             </p>
           </div>
 
