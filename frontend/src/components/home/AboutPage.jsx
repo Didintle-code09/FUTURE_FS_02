@@ -88,15 +88,13 @@ function AboutPage({ onBackHome, onOpenDashboard, onOpenSignup, profile }) {
           <span className="section-label">Why LeadNest</span>
           <h2>The vision behind the product.</h2>
           <p>
-            LeadNest is part of how I express creativity through technology. I want it to feel modern, clean,
-            and useful while showing the kind of thoughtful digital experiences I hope to keep building in the
-            future.
+            LeadNest was born from a simple idea: the tools we use every day should inspire us, not slow us down. I wanted to build more than just a CRM; I wanted to create a workspace that feels intuitive, modern, and beautifully crafted—a place where you actually want to log in and do your best work.
           </p>
 
           <div className="about-quote-block">
             <strong>What matters most</strong>
             <p>
-              Keep learning, keep creating, and build things that feel meaningful.
+              Building meaningful digital experiences that turn everyday tasks into opportunities for growth.
             </p>
           </div>
         </section>
