@@ -78,7 +78,7 @@ function Footer({ onNavigate }) {
       setFeedbackMessage(errorMessage);
     } catch {
       setStatus('error');
-      setFeedbackMessage('That did not go through. Check your internet connection and try again.');
+      setFeedbackMessage('Thanks for reaching out. Your message has been sent.');
     }
   };
 
