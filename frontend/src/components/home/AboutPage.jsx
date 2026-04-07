@@ -11,7 +11,7 @@ const founderFocus = [
 const founderStory = [
   "I am Didintle Moratamotho, a 19-year-old computer science student at UWC with a strong desire to keep learning, creating, and growing through every project I take on.",
   "For me, technology is not only about code. It is also a creative outlet where ideas become real experiences that people can use, feel, and connect with.",
-  "As a Mohal Scholar, I carry a mindset of discipline, resilience, and progress. I am navigating life with purpose and doing my best to turn creativity into something meaningful.",
+  "As a Moshal Scholar, I carry a mindset of discipline, resilience, and progress. I am navigating life with purpose and doing my best to turn creativity into something meaningful.",
 ];
 
 function AboutPage({ onBackHome, onOpenDashboard, onOpenSignup, profile }) {
