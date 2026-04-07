@@ -10,11 +10,11 @@ export const aboutProfile = {
   highlights: [
     'I am building my path as a young developer by combining technical growth with creative thinking.',
     'Studying computer science at UWC is giving me the foundation to solve problems with structure, logic, and confidence.',
-    'Being a Mohal Scholar reminds me to keep growing, stay disciplined, and make the most of every opportunity in front of me.',
+    'Being a Moshal Scholar reminds me to keep growing, stay disciplined, and make the most of every opportunity in front of me.',
   ],
   stats: [
     { label: 'Age', value: '19' },
     { label: 'Campus', value: 'UWC' },
-    { label: 'Scholar', value: 'Mohal' },
+    { label: 'Scholar', value: 'Moshal' },
   ],
 };
