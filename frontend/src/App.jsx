@@ -330,7 +330,14 @@ function App() {
     });
   };
 
-  const renderNavbar = ({ activeSection: navbarActiveSection = '', ctaLabel, ctaMobileLabel, onCta }) => (
+  const renderNavbar = ({
+    activeSection: navbarActiveSection = '',
+    ctaLabel,
+    ctaMobileLabel,
+    onCta,
+    onMobileLogout,
+    showMobileLogout = false,
+  }) => (
     <Navbar
       activeSection={navbarActiveSection}
       ctaLabel={ctaLabel}
@@ -338,9 +345,11 @@ function App() {
       isMenuOpen={mobileMenuOpen}
       isScrolled={isScrolled}
       onCta={onCta}
+      onMobileLogout={onMobileLogout}
       onNavigate={handleMarketingNavigation}
       onToggleMenu={() => setMobileMenuOpen((isOpen) => !isOpen)}
       onToggleTheme={toggleTheme}
+      showMobileLogout={showMobileLogout}
       theme={theme}
       themeMode={themeMode}
     />
@@ -465,6 +474,8 @@ function App() {
           ctaLabel: 'Logout',
           ctaMobileLabel: 'Logout',
           onCta: handleLogout,
+          onMobileLogout: handleLogout,
+          showMobileLogout: true,
         })}
 
         <main className="dashboard-page-main">

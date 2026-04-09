@@ -16,9 +16,11 @@ function Navbar({
   isMenuOpen,
   isScrolled,
   onCta,
+  onMobileLogout,
   onNavigate,
   onToggleMenu,
   onToggleTheme,
+  showMobileLogout = false,
   theme,
   themeMode,
 }) {
@@ -95,6 +97,12 @@ function Navbar({
               {item.label}
             </button>
           ))}
+
+          {showMobileLogout && (
+            <button className="mobile-nav-link" onClick={onMobileLogout} type="button">
+              Logout
+            </button>
+          )}
         </nav>
 
         <div className="mobile-drawer-footer">
