@@ -12,7 +12,7 @@ import PrivacyPolicyPage from './components/home/PrivacyPolicyPage.jsx';
 import QuickActions from './components/home/QuickActions.jsx';
 import SectionReveal from './components/home/SectionReveal.jsx';
 import StatsCards from './components/home/StatsCards.jsx';
-import { ArrowUpIcon, MoonIcon, SunIcon } from './components/home/Icons.jsx';
+import { ArrowUpIcon } from './components/home/Icons.jsx';
 import { aboutProfile } from './data/aboutProfile.js';
 import { authAPI, leadsAPI } from './services/api';
 
@@ -330,21 +330,20 @@ function App() {
     });
   };
 
-  const renderThemeToggle = () => (
-    <button
-      aria-label={`Theme mode: ${themeMode}. Current appearance: ${theme}. Tap to change theme mode.`}
-      className="theme-toggle"
-      onClick={toggleTheme}
-      type="button"
-    >
-      <span className={`theme-icon ${theme === 'light' ? 'is-visible' : ''}`}>
-        <MoonIcon />
-      </span>
-      <span className={`theme-icon ${theme === 'dark' ? 'is-visible' : ''}`}>
-        <SunIcon />
-      </span>
-      <span className="theme-mode-indicator">{themeMode === 'system' ? 'Auto' : themeMode === 'dark' ? 'Dark' : 'Light'}</span>
-    </button>
+  const renderNavbar = ({ activeSection: navbarActiveSection = '', ctaLabel, ctaMobileLabel, onCta }) => (
+    <Navbar
+      activeSection={navbarActiveSection}
+      ctaLabel={ctaLabel}
+      ctaMobileLabel={ctaMobileLabel}
+      isMenuOpen={mobileMenuOpen}
+      isScrolled={isScrolled}
+      onCta={onCta}
+      onNavigate={handleMarketingNavigation}
+      onToggleMenu={() => setMobileMenuOpen((isOpen) => !isOpen)}
+      onToggleTheme={toggleTheme}
+      theme={theme}
+      themeMode={themeMode}
+    />
   );
 
   if (loading) {
@@ -364,24 +363,11 @@ function App() {
 
     return (
       <div className="auth-page">
-        <header className={`portal-header ${isScrolled ? 'is-scrolled' : ''}`}>
-          <div className="section-frame portal-header-inner">
-            <button className="brand-lockup" onClick={() => openPage('welcome')} type="button">
-              <LogoMark />
-              <div className="brand-copy">
-                <span className="brand-name">LeadNest</span>
-                <span className="brand-tag">Track leads, close deals, grow smarter.</span>
-              </div>
-            </button>
-
-            <div className="portal-actions">
-              <button className="secondary-button compact-button" onClick={() => openPage('welcome')} type="button">
-                Back to Welcome
-              </button>
-              {renderThemeToggle()}
-            </div>
-          </div>
-        </header>
+        {renderNavbar({
+          ctaLabel: 'Welcome Page',
+          ctaMobileLabel: 'Welcome Page',
+          onCta: () => openPage('welcome'),
+        })}
 
         <main className="auth-page-main">
           <div className="section-frame auth-layout">
@@ -429,24 +415,12 @@ function App() {
   if (page === 'about') {
     return (
       <div className="about-page">
-        <header className={`portal-header ${isScrolled ? 'is-scrolled' : ''}`}>
-          <div className="section-frame portal-header-inner">
-            <button className="brand-lockup" onClick={() => openPage('welcome')} type="button">
-              <LogoMark />
-              <div className="brand-copy">
-                <span className="brand-name">LeadNest</span>
-                <span className="brand-tag">Founder story and product vision</span>
-              </div>
-            </button>
-
-            <div className="portal-actions">
-              <button className="secondary-button compact-button" onClick={() => openPage('welcome')} type="button">
-                Welcome Page
-              </button>
-              {renderThemeToggle()}
-            </div>
-          </div>
-        </header>
+        {renderNavbar({
+          activeSection: 'about',
+          ctaLabel: 'Welcome Page',
+          ctaMobileLabel: 'Welcome Page',
+          onCta: () => openPage('welcome'),
+        })}
 
         <AboutPage
           onBackHome={() => openPage('welcome')}
@@ -465,24 +439,11 @@ function App() {
   if (page === 'privacy') {
     return (
       <div className="about-page">
-        <header className={`portal-header ${isScrolled ? 'is-scrolled' : ''}`}>
-          <div className="section-frame portal-header-inner">
-            <button className="brand-lockup" onClick={() => openPage('welcome')} type="button">
-              <LogoMark />
-              <div className="brand-copy">
-                <span className="brand-name">LeadNest</span>
-                <span className="brand-tag">Privacy information and data handling</span>
-              </div>
-            </button>
-
-            <div className="portal-actions">
-              <button className="secondary-button compact-button" onClick={() => openPage('welcome')} type="button">
-                Welcome Page
-              </button>
-              {renderThemeToggle()}
-            </div>
-          </div>
-        </header>
+        {renderNavbar({
+          ctaLabel: 'Welcome Page',
+          ctaMobileLabel: 'Welcome Page',
+          onCta: () => openPage('welcome'),
+        })}
 
         <PrivacyPolicyPage
           onBackHome={() => openPage('welcome')}
@@ -499,28 +460,12 @@ function App() {
   if (page === 'dashboard' && isAuthenticated) {
     return (
       <div className="dashboard-page">
-        <header className={`portal-header ${isScrolled ? 'is-scrolled' : ''}`}>
-          <div className="section-frame portal-header-inner">
-            <button className="brand-lockup" onClick={() => openPage('welcome')} type="button">
-              <LogoMark />
-              <div className="brand-copy">
-                <span className="brand-name">LeadNest</span>
-                <span className="brand-tag">Your authenticated CRM workspace</span>
-              </div>
-            </button>
-
-            <div className="portal-actions">
-              <div className="portal-user-chip">Welcome, {user?.username || 'LeadNest team'}</div>
-              <button className="secondary-button compact-button" onClick={() => openPage('welcome')} type="button">
-                Welcome Page
-              </button>
-              {renderThemeToggle()}
-              <button className="nav-cta" onClick={handleLogout} type="button">
-                Logout
-              </button>
-            </div>
-          </div>
-        </header>
+        {renderNavbar({
+          activeSection: 'dashboard',
+          ctaLabel: 'Logout',
+          ctaMobileLabel: 'Logout',
+          onCta: handleLogout,
+        })}
 
         <main className="dashboard-page-main">
           <div className="section-frame dashboard-intro">

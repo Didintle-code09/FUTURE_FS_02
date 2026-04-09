@@ -49,21 +49,6 @@ function Navbar({
           </nav>
 
           <div className="navbar-actions">
-            <button
-              aria-label={`Theme mode: ${themeMode}. Current appearance: ${theme}. Tap to change theme mode.`}
-              className="theme-toggle"
-              onClick={onToggleTheme}
-              type="button"
-            >
-              <span className={`theme-icon ${theme === 'light' ? 'is-visible' : ''}`}>
-                <MoonIcon />
-              </span>
-              <span className={`theme-icon ${theme === 'dark' ? 'is-visible' : ''}`}>
-                <SunIcon />
-              </span>
-              <span className="theme-mode-indicator">{themeMode === 'system' ? 'Auto' : themeMode === 'dark' ? 'Dark' : 'Light'}</span>
-            </button>
-
             <button className="nav-cta" onClick={onCta} type="button">
               {ctaLabel}
               <ArrowRightIcon />
@@ -113,7 +98,7 @@ function Navbar({
         </nav>
 
         <div className="mobile-drawer-footer">
-          <button className="theme-toggle full-width" onClick={onToggleTheme} type="button">
+          <button className="theme-toggle full-width theme-toggle-drawer" onClick={onToggleTheme} type="button">
             <span>
               {themeMode === 'system'
                 ? `Auto Theme (${theme})`

@@ -87,7 +87,7 @@ function Hero({
               {recentLeads.length ? (
                 recentLeads.map((lead) => (
                   <div className="hero-lead-row" key={lead.id || lead._id}>
-                    <div>
+                    <div className="hero-lead-copy">
                       <strong>{lead.name}</strong>
                       <span>{lead.company || 'South African business lead'}</span>
                     </div>
@@ -96,7 +96,7 @@ function Hero({
                 ))
               ) : (
                 <div className="hero-lead-row">
-                  <div>
+                  <div className="hero-lead-empty-copy">
                     <strong>No live leads yet</strong>
                     <span>Create your first lead to start building your pipeline.</span>
                   </div>

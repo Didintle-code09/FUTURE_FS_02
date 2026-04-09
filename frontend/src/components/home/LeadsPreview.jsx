@@ -57,7 +57,7 @@ function LeadsPreview({ leads }) {
               {leads.map((lead) => (
                 <article className="mobile-lead-card" key={lead.id || lead._id}>
                   <div className="mobile-lead-topline">
-                    <div>
+                    <div className="mobile-lead-copy">
                       <strong>{lead.name}</strong>
                       <span>{lead.company || 'Independent / not added yet'}</span>
                     </div>

@@ -4,6 +4,37 @@ import LeadCard from './LeadCard.jsx';
 import LeadForm from './LeadForm.jsx';
 import '../styles/dashboard.css';
 
+const STATUS_ORDER = ['new', 'contacted', 'interested', 'converted', 'lost'];
+
+const STATUS_LABELS = {
+  new: 'New',
+  contacted: 'Contacted',
+  interested: 'Interested',
+  converted: 'Converted',
+  lost: 'Lost',
+};
+
+const STATUS_COLORS = {
+  new: '#3498db',
+  contacted: '#f39c12',
+  interested: '#2ecc71',
+  converted: '#27ae60',
+  lost: '#e74c3c',
+};
+
+const getIsoDayLabel = (date) =>
+  date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
+
+const formatGraphDate = (date) =>
+  date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+
 function Dashboard({ launchAction, onActionHandled }) {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -150,6 +181,41 @@ function Dashboard({ launchAction, onActionHandled }) {
       ? leads
       : leads.filter((lead) => lead.status === filterStatus);
 
+  const statusMetrics = STATUS_ORDER.map((status) => ({
+    status,
+    label: STATUS_LABELS[status],
+    count: leads.filter((lead) => lead.status === status).length,
+    color: STATUS_COLORS[status],
+  }));
+
+  const maxStatusCount = Math.max(...statusMetrics.map((metric) => metric.count), 1);
+
+  const weeklyMetrics = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() - (6 - index));
+
+    const count = leads.filter((lead) => {
+      if (!lead.createdAt) {
+        return false;
+      }
+
+      const leadDate = new Date(lead.createdAt);
+      return (
+        !Number.isNaN(leadDate.getTime()) &&
+        leadDate.toDateString() === date.toDateString()
+      );
+    }).length;
+
+    return {
+      label: getIsoDayLabel(date),
+      shortLabel: formatGraphDate(date),
+      count,
+    };
+  });
+
+  const maxWeeklyCount = Math.max(...weeklyMetrics.map((metric) => metric.count), 1);
+
   if (loading && leads.length === 0) {
     return <div className="dashboard-loading">Loading leads...</div>;
   }
@@ -179,6 +245,69 @@ function Dashboard({ launchAction, onActionHandled }) {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+
+      <section className="graph-section" aria-labelledby="dashboard-graph-title">
+        <div className="graph-header">
+          <div>
+            <p className="graph-eyebrow">Pipeline overview</p>
+            <h3 id="dashboard-graph-title">Lead activity graph</h3>
+          </div>
+          <p className="graph-description">
+            Track lead distribution and recent activity at a glance.
+          </p>
+        </div>
+
+        <div className="graph-grid">
+          <article className="graph-card">
+            <div className="graph-card-header">
+              <h4>Status breakdown</h4>
+              <span>{leads.length} total leads</span>
+            </div>
+
+            <div className="bar-chart" role="img" aria-label="Lead status breakdown chart">
+              {statusMetrics.map((metric) => (
+                <div className="bar-chart-row" key={metric.status}>
+                  <div className="bar-chart-meta">
+                    <span className="bar-label">{metric.label}</span>
+                    <span className="bar-value">{metric.count}</span>
+                  </div>
+                  <div className="bar-track">
+                    <div
+                      className="bar-fill"
+                      style={{
+                        width: `${(metric.count / maxStatusCount) * 100}%`,
+                        backgroundColor: metric.color,
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="graph-card">
+            <div className="graph-card-header">
+              <h4>Last 7 days</h4>
+              <span>Created leads</span>
+            </div>
+
+            <div className="mini-chart" role="img" aria-label="Leads created over the last seven days chart">
+              {weeklyMetrics.map((metric) => (
+                <div className="mini-chart-column" key={metric.label}>
+                  <div className="mini-chart-bar-wrap">
+                    <div
+                      className="mini-chart-bar"
+                      style={{ height: `${(metric.count / maxWeeklyCount) * 100}%` }}
+                    />
+                  </div>
+                  <span className="mini-chart-count">{metric.count}</span>
+                  <span className="mini-chart-label">{metric.shortLabel}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
 
       {showForm && (
         <div className="form-container">
