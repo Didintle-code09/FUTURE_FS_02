@@ -361,7 +361,7 @@ function App() {
         <div className="loading-panel panel-card">
           <LogoMark />
           <h1>Loading LeadNest</h1>
-          <p>Checking your workspace and preparing the right next step.</p>
+          <p>Hang on, checking your workspace and preparing the right next step.</p>
         </div>
       </div>
     );

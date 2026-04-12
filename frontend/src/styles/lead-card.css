@@ -1,11 +1,11 @@
 .lead-card{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel-strong),var(--surface));border-radius:1.35rem;padding:1.35rem;box-shadow:var(--shadow);transition:transform .3s ease,box-shadow .3s ease;border-top:3px solid var(--primary)}
 :root[data-theme='dark'] .lead-card,:root[data-theme='dark'] .lead-status-controls,:root[data-theme='dark'] .notes-section,:root[data-theme='dark'] .note-item{box-shadow:var(--glow)}
 .lead-card:hover{box-shadow:0 18px 45px rgba(124,58,237,.16);transform:translateY(-4px)}
-.lead-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;border-bottom:1px solid var(--line);padding-bottom:1rem}
-.lead-title{display:flex;align-items:center;gap:1rem;flex:1}
-.lead-title h4{font-size:1.2rem;color:var(--text);margin:0}
+.lead-header{display:flex;justify-content:space-between;align-items:flex-start;gap:.85rem;margin-bottom:1rem;border-bottom:1px solid var(--line);padding-bottom:1rem}
+.lead-title{display:flex;flex-direction:column;align-items:flex-start;gap:.55rem;flex:1;min-width:0}
+.lead-title h4{font-size:1.2rem;color:var(--text);margin:0;line-height:1.25;overflow-wrap:anywhere}
 .status-badge{display:inline-block;color:#fff;padding:.3rem .75rem;border-radius:999px;font-size:.8rem;font-weight:600;text-transform:uppercase}
-.lead-actions{display:flex;gap:.5rem}
+.lead-actions{display:flex;gap:.5rem;flex-shrink:0;align-self:flex-start}
 .btn-icon{border:1px solid var(--line);padding:.45rem .65rem;border-radius:.8rem;font-size:1rem;transition:transform .3s ease,border-color .3s ease,background-color .3s ease;background:var(--surface)}
 .btn-icon:hover{transform:translateY(-2px);border-color:rgba(124,58,237,.28)}
 .lead-info{margin-bottom:1.5rem}
@@ -36,4 +36,4 @@
 .btn-save:hover:not(:disabled),.btn-cancel:hover{transform:translateY(-2px)}
 .btn-save:disabled{opacity:.5;cursor:not-allowed}
 .btn-cancel{background:var(--surface);border:1px solid var(--line);color:var(--text)}
-@media (max-width:768px){.lead-header,.lead-title,.note-actions{flex-direction:column;align-items:flex-start}.lead-actions{justify-self:flex-end}}
+@media (max-width:768px){.lead-header,.note-actions{flex-direction:column;align-items:flex-start}.lead-actions{width:100%;justify-content:flex-end}}
