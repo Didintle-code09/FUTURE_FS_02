@@ -11,6 +11,9 @@ function LeadCard({
   const [showNoteInput, setShowNoteInput] = useState(false);
   const [noteText, setNoteText] = useState('');
   const [addingNote, setAddingNote] = useState(false);
+  const [isNotesExpanded, setIsNotesExpanded] = useState(false);
+
+  const notes = Array.isArray(lead.notes) ? lead.notes : [];
 
   const handleAddNote = async () => {
     if (!noteText.trim()) return;
@@ -131,57 +134,72 @@ function LeadCard({
       </div>
 
       <div className="notes-section">
-        <h5>Notes ({lead.notes.length})</h5>
-
-        {lead.notes.length > 0 && (
-          <div className="notes-list">
-            {lead.notes
-              .slice()
-              .reverse()
-              .map((note, index) => (
-                <div key={index} className="note-item">
-                  <p className="note-text">{note.text}</p>
-                  <span className="note-date">
-                    {formatDate(note.createdAt)}
-                  </span>
-                </div>
-              ))}
-          </div>
-        )}
-
-        {!showNoteInput ? (
+        <div className="notes-header">
+          <h5>Notes ({notes.length})</h5>
           <button
-            className="add-note-btn"
-            onClick={() => setShowNoteInput(true)}
+            className="notes-toggle-btn"
+            type="button"
+            onClick={() => setIsNotesExpanded((prev) => !prev)}
+            aria-expanded={isNotesExpanded}
+            aria-controls={`notes-content-${lead._id}`}
           >
-            + Add Note
+            {isNotesExpanded ? 'Collapse' : 'Expand'}
           </button>
-        ) : (
-          <div className="note-input-group">
-            <textarea
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-              placeholder="Enter your note..."
-              rows="3"
-            />
-            <div className="note-actions">
+        </div>
+
+        {isNotesExpanded && (
+          <div id={`notes-content-${lead._id}`}>
+            {notes.length > 0 && (
+              <div className="notes-list">
+                {notes
+                  .slice()
+                  .reverse()
+                  .map((note, index) => (
+                    <div key={index} className="note-item">
+                      <p className="note-text">{note.text}</p>
+                      <span className="note-date">
+                        {formatDate(note.createdAt)}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            {!showNoteInput ? (
               <button
-                className="btn-save"
-                onClick={handleAddNote}
-                disabled={addingNote || !noteText.trim()}
+                className="add-note-btn"
+                onClick={() => setShowNoteInput(true)}
               >
-                {addingNote ? 'Adding...' : 'Save Note'}
+                + Add Note
               </button>
-              <button
-                className="btn-cancel"
-                onClick={() => {
-                  setShowNoteInput(false);
-                  setNoteText('');
-                }}
-              >
-                Cancel
-              </button>
-            </div>
+            ) : (
+              <div className="note-input-group">
+                <textarea
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                  placeholder="Enter your note..."
+                  rows="3"
+                />
+                <div className="note-actions">
+                  <button
+                    className="btn-save"
+                    onClick={handleAddNote}
+                    disabled={addingNote || !noteText.trim()}
+                  >
+                    {addingNote ? 'Adding...' : 'Save Note'}
+                  </button>
+                  <button
+                    className="btn-cancel"
+                    onClick={() => {
+                      setShowNoteInput(false);
+                      setNoteText('');
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
